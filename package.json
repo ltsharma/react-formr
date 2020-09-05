@@ -1,6 +1,6 @@
 {
   "name": "react-formr",
-  "version": "1.0.0",
+  "version": "1.0.01",
   "description": "Form managing component for React & React Native",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "url": "https://github.com/ltsharma/react-formr/issues"
   },
   "homepage": "https://github.com/ltsharma/react-formr#readme",
-  "dependencies": {
+  "peerDependencies": {
     "react": "~16.13.1",
     "validator": "~13.1.1"
   },

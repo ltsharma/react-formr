@@ -17,18 +17,18 @@ export interface StringObject {
   [key: string]: string;
 }
 
-export interface FormerValidation {
+export interface FormrValidation {
   [key: string]: FormValidation;
 }
 
-export interface FormerProps {
+export interface FormrProps {
   children: any;
   formFields: { [key: string]: string };
-  validation?: FormerValidation;
+  validation?: FormrValidation;
   onChange?: () => object;
 }
 
-export interface FormerFunctions {
+export interface FormrFunctions {
   onHandleChange: Function;
   onHandleBlur: Function;
   values: StringObject;

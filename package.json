@@ -1,10 +1,12 @@
 {
   "name": "react-formr",
-  "version": "1.0.01",
+  "version": "1.1.1",
   "description": "Form managing component for React & React Native",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,7 @@
   },
   "homepage": "https://github.com/ltsharma/react-formr#readme",
   "peerDependencies": {
-    "react": "~16.13.1",
+    "react": "^16.0,0",
     "validator": "~13.1.1"
   },
   "devDependencies": {

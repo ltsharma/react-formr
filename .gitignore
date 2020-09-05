@@ -9,3 +9,5 @@ dist
 
 # Dependency directory
 node_modules
+yarn.lock
+package-lock.json

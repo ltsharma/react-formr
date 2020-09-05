@@ -1,0 +1,49 @@
+{
+  "manifest": {
+    "name": "react-former",
+    "version": "1.0.0",
+    "description": "Form managing component for React & React Native",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/ltsharma/react-former.git"
+    },
+    "keywords": [
+      "react",
+      "react-native",
+      "react-form",
+      "react-native-form"
+    ],
+    "author": {
+      "name": "ltsharma"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/ltsharma/react-former/issues"
+    },
+    "homepage": "https://github.com/ltsharma/react-former#readme",
+    "dependencies": {
+      "react": "~16.13.1",
+      "validator": "~13.1.1"
+    },
+    "devDependencies": {
+      "@types/react": "^16.9.34",
+      "typescript": "^3.8.3",
+      "@types/validator": "^13.1.0"
+    },
+    "_registry": "npm",
+    "_loc": "/Users/lakshmeesha/Library/Caches/Yarn/v6/npm-react-former-1.0.0-7cbb84b8-b37b-4eeb-927a-c73b1649e08d-1599295727622/node_modules/react-former/package.json"
+  },
+  "artifacts": [],
+  "remote": {
+    "type": "copy",
+    "registry": "npm",
+    "hash": "7cbb84b8-b37b-4eeb-927a-c73b1649e08d-1599295727622",
+    "reference": "/usr/local/lib/node_modules/react-former"
+  },
+  "registry": "npm",
+  "hash": "7cbb84b8-b37b-4eeb-927a-c73b1649e08d-1599295727622"
+}

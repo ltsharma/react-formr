@@ -1,0 +1,34 @@
+{
+  "name": "react-formr",
+  "version": "1.0.0",
+  "description": "Form managing component for React & React Native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ltsharma/react-former.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "react-form",
+    "react-native-form"
+  ],
+  "author": "ltsharma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ltsharma/react-formr/issues"
+  },
+  "homepage": "https://github.com/ltsharma/react-formr#readme",
+  "dependencies": {
+    "react": "~16.13.1",
+    "validator": "~13.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.34",
+    "typescript": "^3.8.3",
+    "@types/validator": "^13.1.0"
+  }
+}

@@ -94,7 +94,7 @@ const Formr: React.FC<FormrProps> = ({
       }
       return false;
     },
-    []
+    [values, touched, valid]
   );
 
   const returnItem: FormrFunctions = {

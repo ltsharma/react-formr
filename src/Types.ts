@@ -27,7 +27,13 @@ export interface FormrProps {
   validation?: FormrValidation;
   onChange?: () => object;
 }
-
+export interface InputBinderProps {
+  onChangeText: (text: string) => void;
+  onBlur: () => void;
+  value: string;
+  valid: boolean;
+  touched: boolean;
+}
 export interface FormrFunctions {
   onHandleChange: Function;
   onHandleBlur: Function;
@@ -35,4 +41,5 @@ export interface FormrFunctions {
   touched: BoolObject;
   valid: BoolObject;
   handleSubmit: Function;
+  inputBinder: Function;
 }

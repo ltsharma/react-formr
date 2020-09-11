@@ -6,6 +6,7 @@ import {
   FormrProps,
   FormrFunctions,
   StringObject,
+  InputBinderProps,
 } from "./Types";
 
 const Formr: React.FC<FormrProps> = ({
@@ -72,6 +73,7 @@ const Formr: React.FC<FormrProps> = ({
           // reurn true if any nonvalid formfields
           if (
             validation &&
+            validation[key] &&
             validation[key].hasOwnProperty("required") &&
             validation[key].required
           ) {
@@ -97,6 +99,19 @@ const Formr: React.FC<FormrProps> = ({
     [values, touched, valid]
   );
 
+  const inputBinder = useCallback(
+    (key: string): InputBinderProps => {
+      return {
+        onChangeText: (text: string) => onHandleChange(key, text),
+        onBlur: () => onHandleBlur(key),
+        value: values[key],
+        touched: touched[key],
+        valid: valid[key],
+      };
+    },
+    [onHandleChange, onHandleBlur, values, touched, valid]
+  );
+
   const returnItem: FormrFunctions = {
     onHandleChange,
     onHandleBlur,
@@ -104,6 +119,7 @@ const Formr: React.FC<FormrProps> = ({
     values,
     touched,
     valid,
+    inputBinder,
   };
   return children(returnItem);
 };

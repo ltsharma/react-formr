@@ -86,6 +86,8 @@ export const App = () => {
 
 ## Form control function args
 
+To control form fields, The `Formr` component will provide a function that include
+
 | Name             | Type                            | Usage                                        | Descripion                                                                                                               | Example                                                                                         |
 | ---------------- | ------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | `onHandleChange` | `Function`                      | `onHandleChange( key:string, value:string )` | To set value of the field, call this function with arguments: `key` - which input field to update. `value` to that field | ` <TextInput onChangeText={ (text)=> onHandleChange("email":text) } />`                         |

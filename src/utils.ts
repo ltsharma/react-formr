@@ -1,5 +1,5 @@
 import validatorFn from "validator";
-import { StringObject, BoolObject, FormValidation } from "./Types";
+import { StringObject, BoolObject, FormValidation, NullObject } from "./Types";
 export const validator = (
   type: string = "",
   value: string,
@@ -24,5 +24,11 @@ export const validator = (
 export const fieldBools = (obj: StringObject | FormValidation) =>
   Object.keys(obj).reduce((acc: BoolObject, key: string) => {
     acc[key] = false;
+    return acc;
+  }, {});
+
+export const fieldNulls = (obj: StringObject | FormValidation) =>
+  Object.keys(obj).reduce((acc: NullObject, key: string) => {
+    acc[key] = null;
     return acc;
   }, {});

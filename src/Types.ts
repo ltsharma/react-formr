@@ -13,6 +13,9 @@ export interface FormValidation {
 export interface BoolObject {
   [key: string]: boolean;
 }
+export interface NullObject {
+  [key: string]: null;
+}
 export interface StringObject {
   [key: string]: string;
 }

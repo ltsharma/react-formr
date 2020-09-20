@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/ltsharma/react-formr#readme",
   "peerDependencies": {
-    "react": "^16.0,0",
+    "react": "^16.0.0"
+  },
+  "dependencies": {
     "validator": "~13.1.1"
   },
   "devDependencies": {

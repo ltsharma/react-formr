@@ -17,44 +17,49 @@ const Formr: React.FC<FormrProps> = ({
 }) => {
   const [values, setValues] = useState<StringObject>(formFields);
   const [touched, setTouched] = useState<BoolObject>(fieldBools(formFields));
-  const [valid, setValid] = useState<BoolObject>(fieldBools(validation || {}));
+  // const [valid, setValid] = useState<BoolObject>(fieldBools(validation || {}));
+  const valid = useRef<BoolObject>(fieldBools(validation || {}));
 
+  const setValid = useCallback(
+    (key: string, validated: boolean) => {
+      valid.current = { ...valid.current, [key]: validated };
+    },
+    [valid]
+  );
   useEffect(() => {
     onChange(values);
   }, [values]);
+
+  // run validation & set validation
+  const fieldValidation = (key: string, value: string) => {
+    if (validation && validation[key]) {
+      const validationObj: FormValidation = validation[key];
+      // if validation type is set
+      if (validationObj.type) {
+        const validation = validator(validationObj.type, value);
+        setValid(key, validation);
+      } else if (validationObj.rules) {
+        // if validation rules is set
+        const validation = validator("rules", value, validationObj.rules);
+        setValid(key, validation);
+      } else if (validationObj.required) {
+        const validation = value !== "";
+        setValid(key, validation);
+      } else {
+        // no validation
+        setValid(key, true);
+      }
+    }
+  };
 
   // Input change listner
   const onHandleChange = useCallback(
     (key: string, value: any): void => {
       // Set form values
       setValues((prev) => ({ ...prev, [key]: value }));
-
-      // run validation & set validation
-      if (validation && validation[key]) {
-        const validationObj: FormValidation = validation[key];
-        // if validation type is set
-        if (validationObj.type) {
-          const validation = validator(validationObj.type, value);
-          setValid((prev) => ({
-            ...prev,
-            [key]: validation,
-          }));
-        } else if (validationObj.rules) {
-          // if validation rules is set
-          setValid((prev) => ({
-            ...prev,
-            [key]: validator("rules", value, validationObj.rules),
-          }));
-        } else {
-          // no validation
-          setValid((prev) => ({
-            ...prev,
-            [key]: true,
-          }));
-        }
-      }
+      fieldValidation(key, value);
     },
-    [setValid, setValues]
+    [setValues, values]
   );
 
   // Input Blur listner
@@ -68,6 +73,10 @@ const Formr: React.FC<FormrProps> = ({
   // formSubmit listner
   const handleSubmit = useCallback(
     (callback: (vals: StringObject) => {}): boolean => {
+      // run validation
+      Object.keys(values).forEach((key) => {
+        fieldValidation(key, values[key]);
+      });
       const submissionAllowed: boolean = !Object.keys(formFields).some(
         (key) => {
           // reurn true if any nonvalid formfields
@@ -77,7 +86,7 @@ const Formr: React.FC<FormrProps> = ({
             validation[key].hasOwnProperty("required") &&
             validation[key].required
           ) {
-            return valid[key] === false;
+            return valid.current[key] === false;
           } else {
             // if no validation or no required fields
             return false;
@@ -106,7 +115,7 @@ const Formr: React.FC<FormrProps> = ({
         onBlur: () => onHandleBlur(key),
         value: values[key],
         touched: touched[key],
-        valid: valid[key],
+        valid: valid.current[key],
       };
     },
     [onHandleChange, onHandleBlur, values, touched, valid]
@@ -118,10 +127,20 @@ const Formr: React.FC<FormrProps> = ({
     handleSubmit,
     values,
     touched,
-    valid,
+    valid: valid.current,
     inputBinder,
   };
   return children(returnItem);
 };
+
+// export interface FormrControllerProps {
+//   children: React.ReactChildren;
+// }
+
+// export const FormrController: React.FC<FormrControllerProps> = ({
+//   children,
+// }) => {
+//   return children;
+// };
 
 export default React.memo(Formr);

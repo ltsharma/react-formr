@@ -20,22 +20,29 @@ export interface StringObject {
   [key: string]: string;
 }
 
+export interface AnyObject {
+  [key: string]: any;
+}
+
 export interface FormrValidation {
   [key: string]: FormValidation;
 }
 
 export interface FormrProps {
   children: any;
-  formFields: { [key: string]: string };
+  formFields: StringObject;
   validation?: FormrValidation;
-  onChange?: () => object;
+  onChange?: (values: StringObject) => object;
+  onFinishFocuse?: (values: StringObject) => void;
 }
 export interface InputBinderProps {
   onChangeText: (text: string) => void;
   onBlur: () => void;
+  onSubmitEditing: () => void;
   value: string;
   valid: boolean;
   touched: boolean;
+  ref: any;
 }
 export interface FormrFunctions {
   onHandleChange: Function;
@@ -45,4 +52,5 @@ export interface FormrFunctions {
   valid: BoolObject;
   handleSubmit: Function;
   inputBinder: Function;
+  refs: AnyObject;
 }

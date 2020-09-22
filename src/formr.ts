@@ -14,21 +14,26 @@ const Formr: React.FC<FormrProps> = ({
   children,
   validation,
   onChange = (vals: StringObject) => {},
+  onFinishFocuse = () => {},
 }) => {
+  // States & refs
   const [values, setValues] = useState<StringObject>(formFields);
   const [touched, setTouched] = useState<BoolObject>(fieldBools(formFields));
-  // const [valid, setValid] = useState<BoolObject>(fieldBools(validation || {}));
   const valid = useRef<BoolObject>(fieldBools(validation || {}));
+  const refs = useRef<any>([]);
 
+  // Additional listener for any change in form fields
+  useEffect(() => {
+    onChange(values);
+  }, [values]);
+
+  // Setting valid helper
   const setValid = useCallback(
     (key: string, validated: boolean) => {
       valid.current = { ...valid.current, [key]: validated };
     },
     [valid]
   );
-  useEffect(() => {
-    onChange(values);
-  }, [values]);
 
   // run validation & set validation
   const fieldValidation = (key: string, value: string) => {
@@ -65,10 +70,10 @@ const Formr: React.FC<FormrProps> = ({
   // Input Blur listner
   const onHandleBlur = useCallback(
     (key: string): void => {
-      fieldValidation(key, values[key]);
       setTouched((prev) => ({ ...prev, [key]: true }));
+      fieldValidation(key, values[key]);
     },
-    [setTouched]
+    [setTouched, values]
   );
 
   // formSubmit listner
@@ -100,9 +105,7 @@ const Formr: React.FC<FormrProps> = ({
         return true;
       } else {
         // blurr all fields to show error if any
-        Object.keys(touched).forEach((acc) => {
-          onHandleBlur(acc);
-        });
+        Object.keys(touched).forEach(onHandleBlur);
       }
       return false;
     },
@@ -111,16 +114,33 @@ const Formr: React.FC<FormrProps> = ({
 
   const inputBinder = useCallback(
     (key: string): InputBinderProps => {
+      const cField = Object.keys(formFields).indexOf(key);
+      const tFields = Object.keys(formFields).length;
       return {
         onChangeText: (text: string) => onHandleChange(key, text),
         onBlur: () => onHandleBlur(key),
         value: values[key],
         touched: touched[key],
         valid: valid.current[key],
+        ref: (ref: any) =>
+          (refs.current[Object.keys(formFields).indexOf(key)] = ref),
+        onSubmitEditing: () => {
+          if (cField + 1 < tFields) {
+            refs.current[Object.keys(formFields).indexOf(key) + 1].focus();
+          } else {
+            onFinishFocuse(values);
+          }
+        },
       };
     },
-    [onHandleChange, onHandleBlur, values, touched, valid]
+    [onHandleChange, onHandleBlur, values, touched, valid, formFields]
   );
+
+  // Mapping ref object to formField keys to destruct while using
+  const outputRefs = { ...formFields };
+  Object.keys(formFields).map((val, key) => {
+    outputRefs[val] = refs.current[key];
+  });
 
   const returnItem: FormrFunctions = {
     onHandleChange,
@@ -130,18 +150,9 @@ const Formr: React.FC<FormrProps> = ({
     touched,
     valid: valid.current,
     inputBinder,
+    refs: outputRefs,
   };
   return children(returnItem);
 };
-
-// export interface FormrControllerProps {
-//   children: React.ReactChildren;
-// }
-
-// export const FormrController: React.FC<FormrControllerProps> = ({
-//   children,
-// }) => {
-//   return children;
-// };
 
 export default React.memo(Formr);

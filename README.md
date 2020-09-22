@@ -110,3 +110,9 @@ To control form fields, The `Formr` component will provide a function that inclu
 | `values`         | `{ [key:string]:string, ... }`  | `values={ values[key] }`                     | Objct of field values, can be used for value input for the `TextInput`                                                                                                                                 | `<TextInput value={values.email} />`                                                            |
 | `valid`          | `{ [key:string]:boolean, ... }` |                                              | Its is This object contains validation results,`true`:valid and `false`:validation fail.                                                                                                               | `{!valid.email && <Text> This fields is invalid </Text>}`                                       |
 | `touched`        | `{ [key:string]:boolean, ... }` |                                              | Its is used to show error message on validation fail.                                                                                                                                                  | `{touched.email && !valid.email && <Text> This fields is invalid </Text>}`                      |
+
+# Todo
+
+- [ ] To add more validation types
+- [ ] To remove validator dependancy
+- [ ] Other elements & values support

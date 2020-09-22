@@ -65,6 +65,7 @@ const Formr: React.FC<FormrProps> = ({
   // Input Blur listner
   const onHandleBlur = useCallback(
     (key: string): void => {
+      fieldValidation(key, values[key]);
       setTouched((prev) => ({ ...prev, [key]: true }));
     },
     [setTouched]

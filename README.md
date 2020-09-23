@@ -5,6 +5,8 @@
 ![MIT](https://img.shields.io/dub/l/vibe-d.svg)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+![react-formr](https://github.com/ltsharma/react-formr/blob/master/img/formr-banner.png)
+
 Centralised Solution for managing values & validation in react native, the options are unlimited
 
 # Features
@@ -27,65 +29,66 @@ NPM \
 1. Import `Formr`
 
 ```javascript
-import Formr from "react-formr";
+import Formr from 'react-formr';
 ```
 
 2. Use it
 
 ```javascript
 export const App = () => {
-  return (
-    <View>
-      <Formr
-        formFields={{ email: "", phone: "" }}
-        validation={{
-          email: { required: true, type: "email" },
-          phone: { type: "phone" },
-        }}>
-        {({
-          onChangeHandler,
-          onBlurHandler,
-          onSubmitEditingHandler,
-          onSubmitHandler,
-          inputBinder,
-          refsHandler,
-          values,
-          touched,
-          valid,
-        }) => {
-          <>
-            <TextInput
-              style={{
-                borderBottomColor: "black",
-                borderWidth: 1,
-                width: "100%",
-              }}
-              onChangeText={(e) => onChangeHandler("email", e)}
-              onBlur={() => onBlurHandler("email")}
-              value={values.email}
-              ref={(ref) => refsHandler("password", ref)}
-            />
-            {touched.email && !valid.email && <Text>Not valid</Text>}
-            // Using input binder
-            <TextInput
-              style={{
-                borderBottomColor: "black",
-                borderWidth: 1,
-                width: "100%",
-              }}
-              {...inputBinder("phone")}
-            />
-            {touched.phone && !valid.phone && <Text>Not valid</Text>}
-            <Button
-              onPress={() => onSubmitHandler(console.log)}
-              title="Submit"
-              color="#841584"
-            />
-          </>;
-        }}
-      </Formr>
-    </View>
-  );
+    return (
+        <View>
+            <Formr
+                formFields={{ email: '', phone: '' }}
+                validation={{
+                    email: { required: true, type: 'email' },
+                    phone: { type: 'phone' }
+                }}
+            >
+                {({
+                    onChangeHandler,
+                    onBlurHandler,
+                    onSubmitEditingHandler,
+                    onSubmitHandler,
+                    inputBinder,
+                    refsHandler,
+                    values,
+                    touched,
+                    valid
+                }) => {
+                    <>
+                        <TextInput
+                            style={{
+                                borderBottomColor: 'black',
+                                borderWidth: 1,
+                                width: '100%'
+                            }}
+                            onChangeText={(e) => onChangeHandler('email', e)}
+                            onBlur={() => onBlurHandler('email')}
+                            value={values.email}
+                            ref={(ref) => refsHandler('password', ref)}
+                        />
+                        {touched.email && !valid.email && (
+                            <Text>Not valid</Text>
+                        )}
+                        // Using input binder
+                        <TextInput
+                            style={{
+                                borderBottomColor: 'black',
+                                borderWidth: 1,
+                                width: '100%'
+                            }}
+                            {...inputBinder('phone')}
+                        />
+                        {touched.phone && !valid.phone && (
+                            <Text>Not valid</Text>
+                        )}
+                        <Button onPress={() => onSubmitHandler(console.log)} title="Submit" color="#841584" />
+                    </>;
+                }}
+            </Formr>
+        </View>
+    );
 };
 ```
 
@@ -118,6 +121,6 @@ To control form fields, The `Formr` component will provide a function that inclu
 
 # Todo
 
-- [ ] To add more validation types
-- [ ] To remove validator dependancy
-- [ ] Other elements & values support
+-   [ ] To add more validation types
+-   [ ] To remove validator dependancy
+-   [ ] Other elements & values support

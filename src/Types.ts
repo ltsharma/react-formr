@@ -32,8 +32,9 @@ export interface FormrProps {
   children: any;
   formFields: StringObject;
   validation?: FormrValidation;
+  disbaleAutoFocus?: boolean;
   onChange?: (values: StringObject) => object;
-  onFinishFocuse?: (values: StringObject) => void;
+  onFinishFocus?: (values: StringObject) => void;
 }
 export interface InputBinderProps {
   onChangeText: (text: string) => void;
@@ -45,12 +46,14 @@ export interface InputBinderProps {
   ref: any;
 }
 export interface FormrFunctions {
-  onHandleChange: Function;
-  onHandleBlur: Function;
+  onChangeHandler: (key: string, value: any) => void;
+  onBlurHandler: (key: string) => void;
+  onSubmitEditingHandler: (key: string) => void;
+  onSubmitHandler: (callback: (values: StringObject) => void) => boolean;
+  inputBinder: (key: string) => InputBinderProps;
+  refsHandler: (key: string, ref: any) => void;
+  refs: AnyObject;
   values: StringObject;
   touched: BoolObject;
   valid: BoolObject;
-  handleSubmit: Function;
-  inputBinder: Function;
-  refs: AnyObject;
 }

@@ -1,3 +1,6 @@
+
+![react-formr](https://github.com/ltsharma/react-formr/blob/master/img/formr-banner.png)
+
 # react-formr
 
 [![npm version](https://badge.fury.io/js/react-formr.svg)](https://badge.fury.io/js/react-formr)
@@ -5,7 +8,6 @@
 ![MIT](https://img.shields.io/dub/l/vibe-d.svg)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-![react-formr](https://github.com/ltsharma/react-formr/blob/master/img/formr-banner.png)
 
 Centralised Solution for managing values & validation in react native, the options are unlimited
 

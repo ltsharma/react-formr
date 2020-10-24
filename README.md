@@ -19,6 +19,9 @@ Centralised Solution for managing values & validation in react native, the optio
 4. Input blur validation & validate on change of invalid input.
 5. Listen to live changes in form using `onChange` props.
 
+## Detailed blog post
+[Easy React Native Form management with react-formr](https://dev.to/ltsharma/easy-react-native-form-management-with-react-formr-47n5)
+
 # Installation
 
 Yarn \

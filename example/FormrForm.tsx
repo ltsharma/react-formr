@@ -43,7 +43,6 @@ export default function App() {
                         onSubmitHandler,
                         inputBinder
                     }: FormrTypes.FormrFunctions) => {
-                        console.log({ values, touched, valid });
                         return (
                             <View
                                 style={{

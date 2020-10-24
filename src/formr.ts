@@ -90,7 +90,7 @@ const Formr: React.FC<FormrProps> = ({
             });
             const submissionAllowed: boolean = !Object.keys(formFields).some(
                 (key) => {
-                    console.log(valid.current[key]);
+                    // console.log(valid.current[key]);
                     // reurn true if any nonvalid formfields
                     if (
                         validation &&
@@ -105,7 +105,7 @@ const Formr: React.FC<FormrProps> = ({
                     }
                 }
             );
-            console.log({ submissionAllowed });
+            // console.log({ submissionAllowed });
             if (submissionAllowed) {
                 callback(values);
                 return true;

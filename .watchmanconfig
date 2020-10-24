@@ -1,5 +1,6 @@
 {
   "ignore_dirs": [
-    ".git"
+    ".git",
+    "node_modules"
   ]
 }

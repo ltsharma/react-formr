@@ -1,5 +1,5 @@
 
-![react-formr](https://github.com/ltsharma/react-formr/blob/master/img/formr-banner.png)
+![react-formr](https://raw.githubusercontent.com/ltsharma/react-formr/master/img/formr-banner.png)
 
 # react-formr
 

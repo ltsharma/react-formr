@@ -1,4 +1,4 @@
 import React from 'react';
-import { FormrProps } from './Types';
-declare const _default: React.NamedExoticComponent<FormrProps>;
+import { FormrWrapperProps } from './Types';
+declare const _default: React.NamedExoticComponent<FormrWrapperProps>;
 export default _default;

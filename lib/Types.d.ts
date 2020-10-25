@@ -25,12 +25,14 @@ export interface FormrValidation {
     [key: string]: FormValidation;
 }
 export interface FormrProps {
-    children: any;
     formFields: StringObject;
     validation?: FormrValidation;
     disbaleAutoFocus?: boolean;
-    onChange?: (values: StringObject) => object;
+    onChange?: (values: StringObject) => void;
     onFinishFocus?: (values: StringObject) => void;
+}
+export interface FormrWrapperProps extends FormrProps {
+    children?: any;
 }
 export interface InputBinderProps {
     onChangeText: (text: string) => void;

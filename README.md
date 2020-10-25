@@ -1,4 +1,3 @@
-
 ![react-formr](https://raw.githubusercontent.com/ltsharma/react-formr/master/img/formr-banner.png)
 
 # react-formr
@@ -8,10 +7,9 @@
 ![MIT](https://img.shields.io/dub/l/vibe-d.svg)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+Centralised Solution for managing values, validations & input focusing in react native.
 
-Centralised Solution for managing values & validation in react native, the options are unlimited
-
-# Features
+## Features
 
 1. Form validation on given rules (regex) or predefined types(email, phone, etc).
 2. Input binder function includes almost everything `TextInput` required to handle form.
@@ -19,25 +17,88 @@ Centralised Solution for managing values & validation in react native, the optio
 4. Input blur validation & validate on change of invalid input.
 5. Listen to live changes in form using `onChange` props.
 
-## Detailed blog post
-[Easy React Native Form management with react-formr](https://dev.to/ltsharma/easy-react-native-form-management-with-react-formr-47n5)
+**Detailed blog post** [Easy React Native Form management with react-formr](https://dev.to/ltsharma/easy-react-native-form-management-with-react-formr-47n5)
 
-# Installation
+## Installation
 
-Yarn \
-`yarn add react-formr` \
-NPM \
-`npm i --save react-formr`
+**Yarn**
 
-# Example Usage
-
-1. Import `Formr`
-
-```javascript
-import Formr from 'react-formr';
+```bash
+yarn add react-formr
 ```
 
-2. Use it
+**NPM**
+
+```bash
+npm i --save react-formr
+```
+
+## Example Usage
+
+### Import
+
+import `Formr` to use with Formr wrapping component OR import `{useFormr}` to use Formr Hook.
+
+```javascript
+import Formr, { useFormr } from 'react-formr';
+```
+
+### Using `useFormr` Hook.
+
+```javascript
+export const App = () => {
+    const {
+        onChangeHandler,
+        onBlurHandler,
+        onSubmitEditingHandler,
+        onSubmitHandler,
+        inputBinder,
+        refsHandler,
+        values,
+        touched,
+        valid
+    } = useFormr({
+        formFields: { email: '', phone: '' },
+        validation: {
+            email: { required: true, type: 'email' },
+            phone: { type: 'phone' }
+        }
+    });
+    return (
+        <View>
+            <TextInput
+                style={{
+                    borderBottomColor: 'black',
+                    borderWidth: 1,
+                    width: '100%'
+                }}
+                onChangeText={(e) => onChangeHandler('email', e)}
+                onBlur={() => onBlurHandler('email')}
+                value={values.email}
+                ref={(ref) => refsHandler('password', ref)}
+            />
+            {touched.email && !valid.email && <Text>Not valid</Text>}
+            {/* Using input binder, No need to take any other function than inputBinder from formr to work with input*/}
+            <TextInput
+                style={{
+                    borderBottomColor: 'black',
+                    borderWidth: 1,
+                    width: '100%'
+                }}
+                {...inputBinder('phone')}
+            />
+            {touched.phone && !valid.phone && <Text>Not valid</Text>}
+            <Button
+                onPress={() => onSubmitHandler(console.log)}
+                title="Submit"
+                color="#841584"
+            />
+        </View>
+    );
+};
+```
+
+### Using `Formr` wrapping component.
 
 ```javascript
 export const App = () => {
@@ -76,7 +137,7 @@ export const App = () => {
                         {touched.email && !valid.email && (
                             <Text>Not valid</Text>
                         )}
-                        // Using input binder
+                        {/* Using input binder, No need to take any other function than inputBinder from formr to work with input*/}
                         <TextInput
                             style={{
                                 borderBottomColor: 'black',
@@ -88,7 +149,11 @@ export const App = () => {
                         {touched.phone && !valid.phone && (
                             <Text>Not valid</Text>
                         )}
-                        <Button onPress={() => onSubmitHandler(console.log)} title="Submit" color="#841584" />
+                        <Button
+                            onPress={() => onSubmitHandler(console.log)}
+                            title="Submit"
+                            color="#841584"
+                        />
                     </>;
                 }}
             </Formr>
@@ -126,6 +191,7 @@ To control form fields, The `Formr` component will provide a function that inclu
 
 # Todo
 
--   [ ] To add more validation types
--   [ ] To remove validator dependancy
+-   [ ] Add testing
+-   [ ] To add more validation types / Yup
+-   [ ] To remove validator dependancy / Yup
 -   [ ] Other elements & values support

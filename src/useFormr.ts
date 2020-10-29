@@ -1,10 +1,5 @@
-import React, {
-    useState,
-    useRef,
-    useEffect,
-    useCallback,
-    useLayoutEffect
-} from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+
 import {
     BoolObject,
     FormrFunctions,
@@ -18,8 +13,8 @@ const useFormr = ({
     formFields,
     validation,
     disbaleAutoFocus = false,
-    onFinishFocus = () => {},
-    onChange = () => {}
+    onFinishFocus = () => null,
+    onChange = () => null
 }: FormrProps): FormrFunctions => {
     // States & refs
     const [values, setValues] = useState<StringObject>(formFields);
@@ -30,7 +25,7 @@ const useFormr = ({
     // Additional listener for any change in form fields
     useEffect(() => {
         onChange(values);
-    }, [values]);
+    }, [values, onChange]);
 
     // Setting valid helper
     const setValid = useCallback(
@@ -41,30 +36,36 @@ const useFormr = ({
     );
 
     // run validation & set validation
-    const fieldValidation = (key: string, value: string) => {
-        if (validation && validation[key]) {
-            const validationObj: FormValidation = validation[key];
-            // if validation type is set
-            if (validationObj.type) {
-                const validation = validator(validationObj.type, value);
-                setValid(key, validation);
-            } else if (validationObj.rules) {
-                // if validation rules is set
-                const validation = validator(
-                    'rules',
-                    value,
-                    validationObj.rules
-                );
-                setValid(key, validation);
-            } else if (validationObj.required) {
-                const validation = value !== '';
-                setValid(key, validation);
-            } else {
-                // no validation
-                setValid(key, true);
+    const fieldValidation = useCallback(
+        (key: string, value: string) => {
+            if (validation && validation[key]) {
+                const validationObj: FormValidation = validation[key];
+                // if validation type is set
+                if (validationObj.type) {
+                    const interValidation = validator(
+                        validationObj.type,
+                        value
+                    );
+                    setValid(key, interValidation);
+                } else if (validationObj.rules) {
+                    // if validation rules is set
+                    const interValidation = validator(
+                        'rules',
+                        value,
+                        validationObj.rules
+                    );
+                    setValid(key, interValidation);
+                } else if (validationObj.required) {
+                    const interValidation = value !== '';
+                    setValid(key, interValidation);
+                } else {
+                    // no validation
+                    setValid(key, true);
+                }
             }
-        }
-    };
+        },
+        [setValid, validation]
+    );
 
     // Input change listner
     const onChangeHandler = useCallback<FormrFunctions['onChangeHandler']>(
@@ -73,7 +74,7 @@ const useFormr = ({
             setValues((prev) => ({ ...prev, [key]: value }));
             fieldValidation(key, value);
         },
-        [setValues, values]
+        [fieldValidation]
     );
 
     // Input Blur listner
@@ -82,7 +83,7 @@ const useFormr = ({
             setTouched((prev) => ({ ...prev, [key]: true }));
             fieldValidation(key, values[key]);
         },
-        [setTouched, values]
+        [fieldValidation, values]
     );
 
     // formSubmit listner
@@ -117,7 +118,14 @@ const useFormr = ({
             }
             return false;
         },
-        [values, touched, valid, onBlurHandler]
+        [
+            values,
+            formFields,
+            fieldValidation,
+            validation,
+            touched,
+            onBlurHandler
+        ]
     );
 
     // Mapping ref object to formField keys
@@ -155,7 +163,7 @@ const useFormr = ({
                 onFinishFocus(values);
             }
         },
-        [formFields, onFinishFocus, values]
+        [disbaleAutoFocus, formFields, onFinishFocus, values]
     );
 
     const inputBinder = useCallback<FormrFunctions['inputBinder']>(
@@ -170,7 +178,14 @@ const useFormr = ({
                 onSubmitEditing: () => onSubmitEditingHandler(key)
             };
         },
-        [onChangeHandler, onBlurHandler, values, touched, valid, formFields]
+        [
+            values,
+            touched,
+            onChangeHandler,
+            onBlurHandler,
+            refsHandler,
+            onSubmitEditingHandler
+        ]
     );
     const outputRefs = { ...formFields };
     Object.keys(formFields).map((val, key) => {

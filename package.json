@@ -1,6 +1,6 @@
 {
     "name": "react-formr",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "description": "Form managing component for React & React Native",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",

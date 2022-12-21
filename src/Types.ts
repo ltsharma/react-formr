@@ -10,9 +10,12 @@ export interface FormValidation {
     required?: boolean;
     messages?: FormMessages;
 }
-export interface BoolObject {
+export type BoolObject = {
     [key: string]: boolean;
-}
+};
+export type DerivedBoolObject<T> = {
+    [key in keyof T]: boolean;
+};
 export interface NullObject {
     [key: string]: null;
 }
@@ -24,39 +27,39 @@ export interface AnyObject {
     [key: string]: any;
 }
 
-export interface FormrValidation {
-    [key: string]: FormValidation;
-}
+export type FormrValidation<T> = {
+    [key in keyof T]: FormValidation;
+};
 
-export interface FormrProps {
-    formFields: StringObject;
-    validation?: FormrValidation;
+export interface FormrProps<T> {
+    formFields: T;
+    validation?: FormrValidation<T>;
     disbaleAutoFocus?: boolean;
-    onChange?: (values: StringObject) => void;
-    onFinishFocus?: (values: StringObject) => void;
+    onChange?: (values: T) => void;
+    onFinishFocus?: (values: T) => void;
 }
 
-export interface FormrWrapperProps extends FormrProps {
+export interface FormrWrapperProps<T> extends FormrProps<T> {
     children?: any;
 }
 export interface InputBinderProps {
     onChangeText: (text: string) => void;
     onBlur: () => void;
     onSubmitEditing: () => void;
-    value: string;
+    value: any;
     valid: boolean;
     touched: boolean;
     ref: any;
 }
-export interface FormrFunctions {
-    onChangeHandler: (key: string, value: any) => void;
-    onBlurHandler: (key: string) => void;
-    onSubmitEditingHandler: (key: string) => void;
-    onSubmitHandler: (callback: (values: StringObject) => void) => boolean;
-    inputBinder: (key: string) => InputBinderProps;
-    refsHandler: (key: string, ref: any) => void;
+export interface FormrFunctions<T> {
+    onChangeHandler: (key: keyof T, value: any) => void;
+    onBlurHandler: (key: keyof T) => void;
+    onSubmitEditingHandler: (key: keyof T) => void;
+    onSubmitHandler: (callback: (values: T) => void) => boolean;
+    inputBinder: (key: keyof T) => InputBinderProps;
+    refsHandler: (key: keyof T, ref: any) => void;
     refs: AnyObject;
-    values: StringObject;
-    touched: BoolObject;
-    valid: BoolObject;
+    values: T;
+    touched: DerivedBoolObject<T>;
+    valid: DerivedBoolObject<T>;
 }

@@ -2,9 +2,6 @@ import React from 'react';
 import { render, fireEvent } from 'react-native-testing-library';
 import FormrForm from '../example/FormrForm';
 import renderer from 'react-test-renderer';
-// const createTestProps = (props?: object) => ({
-//     ...props
-// });
 
 const validations = {
     allRequired: {
@@ -12,16 +9,14 @@ const validations = {
         name: { required: true },
         password: {
             required: true,
-            rules:
-                '^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$'
+            rules: '^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$'
         }
     },
     noNameValidation: {
         email: { required: true, type: 'email' },
         password: {
             required: true,
-            rules:
-                '^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$'
+            rules: '^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$'
         }
     },
     falseEmailValidation: {
@@ -29,8 +24,7 @@ const validations = {
         name: { required: true },
         password: {
             required: true,
-            rules:
-                '^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$'
+            rules: '^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$'
         }
     }
 };
@@ -287,6 +281,51 @@ describe('Submit with value test', () => {
         fireEvent(emailInput, 'onBlur');
         fireEvent(passwordInput, 'onChangeText', values.emailInvalid.password);
         fireEvent(passwordInput, 'onBlur');
+        fireEvent.press(button);
+        // Values
+        expect(nameInput.props.value).toBe(values.emailInvalid.name);
+        expect(emailInput.props.value).toBe(values.emailInvalid.email);
+        expect(passwordInput.props.value).toBe(values.emailInvalid.password);
+        // Valid
+        expect(nameInput.props.valid).toBe(true);
+        expect(emailInput.props.valid).toBe(false);
+        expect(passwordInput.props.valid).toBe(true);
+        // Touched
+        expect(nameInput.props.touched).toBe(true);
+        expect(emailInput.props.touched).toBe(true);
+        expect(passwordInput.props.touched).toBe(true);
+        // Submit
+        expect(submit.props.submited).toBe(true);
+    });
+
+    test('Input navigation with keyboard submit', () => {
+        const testComponent = (
+            <FormrForm validations={validations.falseEmailValidation} />
+        );
+        const { getByTestId } = render(testComponent);
+
+        const button = getByTestId('formSubmit');
+        const submit = getByTestId('submited-check');
+        // Input
+        const nameInput = getByTestId('nameInput');
+        const emailInput = getByTestId('emailInput');
+        const passwordInput = getByTestId('passwordInput');
+
+        // Test
+        expect(button).not.toBeNull();
+        expect(nameInput).not.toBeNull();
+        expect(emailInput).not.toBeNull();
+        expect(passwordInput).not.toBeNull();
+
+        fireEvent(nameInput, 'onChangeText', values.emailInvalid.name);
+        fireEvent(nameInput, 'onSubmitEditing');
+        fireEvent(nameInput, 'blur');
+        fireEvent(emailInput, 'onChangeText', values.emailInvalid.email);
+        fireEvent(emailInput, 'onSubmitEditing');
+        fireEvent(emailInput, 'blur');
+        fireEvent(passwordInput, 'onChangeText', values.emailInvalid.password);
+        fireEvent(passwordInput, 'onSubmitEditing');
+        fireEvent(passwordInput, 'blur');
         fireEvent.press(button);
         // Values
         expect(nameInput.props.value).toBe(values.emailInvalid.name);

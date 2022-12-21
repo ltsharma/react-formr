@@ -2,24 +2,28 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 
 import {
     BoolObject,
+    DerivedBoolObject,
     FormrFunctions,
     FormrProps,
     FormValidation,
+    InputBinderProps,
     StringObject
 } from './Types';
 import { fieldBools, validator } from './utils';
 
-const useFormr = ({
+const useFormr = <T extends object>({
     formFields,
     validation,
     disbaleAutoFocus = false,
     onFinishFocus = () => null,
     onChange = () => null
-}: FormrProps): FormrFunctions => {
+}: FormrProps<T>): FormrFunctions<T> => {
     // States & refs
-    const [values, setValues] = useState<StringObject>(formFields);
-    const [touched, setTouched] = useState<BoolObject>(fieldBools(formFields));
-    const valid = useRef<BoolObject>(fieldBools(validation || {}));
+    const [values, setValues] = useState<T>(formFields);
+    const [touched, setTouched] = useState(fieldBools<T>(formFields));
+    const valid = useRef<DerivedBoolObject<T>>(
+        fieldBools(validation || {}) as DerivedBoolObject<T>
+    );
     const refs = useRef<any>([]);
 
     // Additional listener for any change in form fields
@@ -29,7 +33,7 @@ const useFormr = ({
 
     // Setting valid helper
     const setValid = useCallback(
-        (key: string, validated: boolean) => {
+        (key: keyof T, validated: boolean) => {
             valid.current = { ...valid.current, [key]: validated };
         },
         [valid]
@@ -37,7 +41,7 @@ const useFormr = ({
 
     // run validation & set validation
     const fieldValidation = useCallback(
-        (key: string, value: string) => {
+        (key: keyof T, value: string | any) => {
             if (validation && validation[key]) {
                 const validationObj: FormValidation = validation[key];
                 // if validation type is set
@@ -68,53 +72,55 @@ const useFormr = ({
     );
 
     // Input change listner
-    const onChangeHandler = useCallback<FormrFunctions['onChangeHandler']>(
+    const onChangeHandler = useCallback<FormrFunctions<T>['onChangeHandler']>(
         (key, value) => {
             // Set form values
-            setValues((prev) => ({ ...prev, [key]: value }));
+            setValues((prev: any) => ({ ...prev, [key]: value }));
             fieldValidation(key, value);
         },
         [fieldValidation]
     );
 
     // Input Blur listner
-    const onBlurHandler = useCallback<FormrFunctions['onBlurHandler']>(
-        (key) => {
+    const onBlurHandler = useCallback<FormrFunctions<T>['onBlurHandler']>(
+        (key: keyof T) => {
             setTouched((prev) => ({ ...prev, [key]: true }));
-            fieldValidation(key, values[key]);
+            fieldValidation(key, values[key as keyof T]);
         },
         [fieldValidation, values]
     );
 
     // formSubmit listner
-    const onSubmitHandler = useCallback<FormrFunctions['onSubmitHandler']>(
+    const onSubmitHandler = useCallback<FormrFunctions<T>['onSubmitHandler']>(
         (callback) => {
             // run validation
-            Object.keys(values).forEach((key) => {
+            (Object.keys(values) as Array<keyof T>).forEach((key: keyof T) => {
                 fieldValidation(key, values[key]);
             });
-            const submissionAllowed: boolean = !Object.keys(formFields).some(
-                (key) => {
-                    // reurn true if any nonvalid formfields
-                    if (
-                        validation &&
-                        validation[key] &&
-                        validation[key].hasOwnProperty('required') &&
-                        validation[key].required
-                    ) {
-                        return valid.current[key] === false;
-                    } else {
-                        // if no validation or no required fields
-                        return false;
-                    }
+            const submissionAllowed: boolean = !(
+                Object.keys(formFields) as Array<keyof T>
+            ).some((key: keyof T) => {
+                // reurn true if any nonvalid formfields
+                if (
+                    validation &&
+                    validation[key] &&
+                    validation[key].hasOwnProperty('required') &&
+                    validation[key].required
+                ) {
+                    return valid.current[key] === false;
+                } else {
+                    // if no validation or no required fields
+                    return false;
                 }
-            );
+            });
             if (submissionAllowed) {
                 callback(values);
                 return true;
             } else {
                 // blurr all fields to show error if any
-                Object.keys(touched).forEach(onBlurHandler);
+                Object.keys(touched).forEach((key) => {
+                    onBlurHandler(key as keyof T);
+                });
             }
             return false;
         },
@@ -129,27 +135,36 @@ const useFormr = ({
     );
 
     // Mapping ref object to formField keys
-    const refsHandler = useCallback<FormrFunctions['refsHandler']>(
+    const refsHandler = useCallback<FormrFunctions<T>['refsHandler']>(
         (key, ref) => {
-            refs.current[Object.keys(formFields).indexOf(key)] = ref;
+            refs.current[
+                (Object.keys(formFields) as Array<keyof T>).indexOf(key)
+            ] = ref;
         },
         [formFields]
     );
 
     const onSubmitEditingHandler = useCallback<
-        FormrFunctions['onSubmitEditingHandler']
+        FormrFunctions<T>['onSubmitEditingHandler']
     >(
         (key) => {
             if (disbaleAutoFocus) {
                 return;
             }
-            const cField = Object.keys(formFields).indexOf(key);
+            const cField = (Object.keys(formFields) as Array<keyof T>).indexOf(
+                key
+            );
+            if (refs.current[cField]?.multiline) {
+                return;
+            }
             const tFields = Object.keys(formFields).length;
             if (cField + 1 < tFields) {
                 for (let idx = cField; idx <= tFields; idx++) {
                     const focusable =
                         refs.current[
-                            Object.keys(formFields).indexOf(key) +
+                            (Object.keys(formFields) as Array<keyof T>).indexOf(
+                                key
+                            ) +
                                 (idx - cField) +
                                 1
                         ];
@@ -166,14 +181,14 @@ const useFormr = ({
         [disbaleAutoFocus, formFields, onFinishFocus, values]
     );
 
-    const inputBinder = useCallback<FormrFunctions['inputBinder']>(
-        (key) => {
+    const inputBinder = useCallback<FormrFunctions<T>['inputBinder']>(
+        (key: keyof T): InputBinderProps => {
             return {
-                onChangeText: (text: string) => onChangeHandler(key, text),
+                onChangeText: (text: any) => onChangeHandler(key, text),
                 onBlur: () => onBlurHandler(key),
-                value: values[key],
-                touched: touched[key],
-                valid: valid.current[key],
+                value: values[key as keyof T],
+                touched: touched[key as keyof T],
+                valid: valid.current[key as keyof T],
                 ref: (ref: any) => refsHandler(key, ref),
                 onSubmitEditing: () => onSubmitEditingHandler(key)
             };
@@ -187,12 +202,12 @@ const useFormr = ({
             onSubmitEditingHandler
         ]
     );
-    const outputRefs = { ...formFields };
+    const outputRefs: any = { ...formFields };
     Object.keys(formFields).map((val, key) => {
         outputRefs[val] = refs.current[key];
     });
 
-    const returnItem: FormrFunctions = {
+    const returnItem: FormrFunctions<T> = {
         onChangeHandler,
         onBlurHandler,
         onSubmitEditingHandler,

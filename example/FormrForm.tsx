@@ -9,7 +9,7 @@ import {
     KeyboardAvoidingView,
     ScrollView
 } from 'react-native';
-import { useFormr } from './../lib';
+import { useFormr } from './../src';
 
 export default function App(props: any) {
     const [submitedValue, setSubmittedValue] = useState({});
@@ -26,7 +26,6 @@ export default function App(props: any) {
         onChange: setOnChangeValue
     });
     // console.log({ values, touched, valid });
-
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -55,9 +54,9 @@ export default function App(props: any) {
                         <TextInput
                             style={{
                                 borderColor:
-                                    valid.email != null &&
-                                    touched.email &&
-                                    !valid.email
+                                    valid?.email != null &&
+                                    touched?.email &&
+                                    !valid?.email
                                         ? 'red'
                                         : 'black',
                                 ...styles.input

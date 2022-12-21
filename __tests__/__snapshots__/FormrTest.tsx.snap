@@ -61,11 +61,9 @@ exports[`Form input test changeText 1`] = `
             Required input with email type
           </Text>
           <TextInput
-            allowFontScaling={true}
             onBlur={[Function]}
             onChangeText={[Function]}
             onSubmitEditing={[Function]}
-            rejectResponderTermination={true}
             style={
               Object {
                 "borderColor": "black",
@@ -78,15 +76,12 @@ exports[`Form input test changeText 1`] = `
             }
             testID="emailInput"
             touched={false}
-            underlineColorAndroid="transparent"
             value=""
           />
         </View>
         <Text
           testID="emailInputvalue"
-        >
-          
-        </Text>
+        />
         <Text
           testID="emailInputvalid"
         >
@@ -122,11 +117,9 @@ exports[`Form input test changeText 1`] = `
             Required input with no rules or type set
           </Text>
           <TextInput
-            allowFontScaling={true}
             onBlur={[Function]}
             onChangeText={[Function]}
             onSubmitEditing={[Function]}
-            rejectResponderTermination={true}
             style={
               Object {
                 "borderColor": "black",
@@ -139,15 +132,12 @@ exports[`Form input test changeText 1`] = `
             }
             testID="nameInput"
             touched={false}
-            underlineColorAndroid="transparent"
             value=""
           />
         </View>
         <Text
           testID="nameInputvalue"
-        >
-          
-        </Text>
+        />
         <Text
           testID="nameInputvalid"
         >
@@ -187,11 +177,9 @@ exports[`Form input test changeText 1`] = `
             Rules (regex): has two uppercase letters. has one special case letter. has two digits. has three lowercase letters. string is of length 8.
           </Text>
           <TextInput
-            allowFontScaling={true}
             onBlur={[Function]}
             onChangeText={[Function]}
             onSubmitEditing={[Function]}
-            rejectResponderTermination={true}
             style={
               Object {
                 "borderColor": "black",
@@ -204,14 +192,11 @@ exports[`Form input test changeText 1`] = `
             }
             testID="passwordInput"
             touched={false}
-            underlineColorAndroid="transparent"
             value=""
           />
           <Text
             testID="passwordInputvalue"
-          >
-            
-          </Text>
+          />
           <Text
             testID="passwordInputvalid"
           >
@@ -226,8 +211,8 @@ exports[`Form input test changeText 1`] = `
         <View
           accessibilityLabel="Learn more about this purple button"
           accessibilityRole="button"
-          accessibilityState={Object {}}
           accessible={true}
+          collapsable={false}
           focusable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}

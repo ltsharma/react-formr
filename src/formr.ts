@@ -1,9 +1,12 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { FormrWrapperProps } from './Types';
 import useFormr from './useFormr';
 
-const Formr: React.FC<FormrWrapperProps> = ({ children, ...props }) => {
-    const returnItem = useFormr(props);
+const Formr = <T extends object>({
+    children,
+    ...props
+}: FormrWrapperProps<T>): ReactElement => {
+    const returnItem = useFormr<T>(props);
     return children(returnItem);
 };
 

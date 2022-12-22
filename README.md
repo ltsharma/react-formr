@@ -99,9 +99,8 @@ export const App = () => {
 };
 ```
 
- <details>
-  <summary>Minimum code version</summary> 
-  Very minimal version by using formr
+### Minimum code version
+  Very minimal version of using formr
   ```javascript
   export const App = () =>{
     const {inputBinder} = useFormr({formFields:{name:"",email:""}});
@@ -111,7 +110,6 @@ export const App = () => {
     </View>);
   }
   ```
-</details>
 
 ### Using `Formr` wrapping component.
 

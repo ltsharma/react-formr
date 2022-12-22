@@ -7,13 +7,13 @@
 ![MIT](https://img.shields.io/dub/l/vibe-d.svg)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-Centralised Solution for managing values, validations & input focusing in react native.
+Centralised Form Solution for managing values, validations & input focusing in react native app.
 
 ## Features
 
-1. Form validation on given rules (regex) or predefined types(email, phone, etc).
-2. Input binder function includes almost everything `TextInput` required to handle form.
-3. Auto focus next available input on submit press, triggering `onFinishFocus` on last input submit.
+1. `inputBinder` function - A function includes almost everything `TextInput`s required to handle a form.
+2. Form validation on given rules (regex) or predefined types(email, phone, etc).
+3. Auto focus next available input on submit press while editing in text input, triggering `onFinishFocus` on submit on last input.
 4. Input blur validation & validate on change of invalid input.
 5. Listen to live changes in form using `onChange` props.
 
@@ -66,6 +66,7 @@ export const App = () => {
     });
     return (
         <View>
+            {/* Passing Descrete props to TextInput (Not using inputBinder) */}
             <TextInput
                 style={{
                     borderBottomColor: 'black',
@@ -78,7 +79,7 @@ export const App = () => {
                 ref={(ref) => refsHandler('password', ref)}
             />
             {touched.email && !valid.email && <Text>Not valid</Text>}
-            {/* Using input binder, No need to take any other function than inputBinder from formr to work with input*/}
+            {/* Using inputBinder, No need to take any other function than inputBinder from formr to work with input*/}
             <TextInput
                 style={{
                     borderBottomColor: 'black',
@@ -97,6 +98,20 @@ export const App = () => {
     );
 };
 ```
+
+ <details>
+  <summary>Minimum code version</summary> 
+  Very minimal version by using formr
+  ```javascript
+  export const App = () =>{
+    const {inputBinder} = useFormr({formFields:{name:"",email:""}});
+    return(<View>
+    <TextInput {...inputBinder('name')} />
+    <TextInput {...inputBinder('email')} />
+    </View>);
+  }
+  ```
+</details>
 
 ### Using `Formr` wrapping component.
 
@@ -191,7 +206,7 @@ To control form fields, The `Formr` component will provide a function that inclu
 
 # Todo
 
--   [ ] Add testing
--   [ ] To add more validation types / Yup
--   [ ] To remove validator dependancy / Yup
+-   [X] Add testing
+-   [ ] To add more validation types 
+-   [ ] To remove validator dependancy 
 -   [ ] Other elements & values support

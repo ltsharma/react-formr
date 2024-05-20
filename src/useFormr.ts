@@ -1,13 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 import {
-    BoolObject,
     DerivedBoolObject,
     FormrFunctions,
     FormrProps,
     FormValidation,
-    InputBinderProps,
-    StringObject
+    InputBinderProps
 } from './Types';
 import { fieldBools, validator } from './utils';
 

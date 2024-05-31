@@ -30,12 +30,9 @@ const useFormr = <T extends object>({
     }, [values, onChange]);
 
     // Setting valid helper
-    const setValid = useCallback(
-        (key: keyof T, validated: boolean) => {
-            valid.current = { ...valid.current, [key]: validated };
-        },
-        [valid]
-    );
+    const setValid = useCallback((key: keyof T, validated: boolean) => {
+        valid.current = { ...valid.current, [key]: validated };
+    }, []);
 
     // run validation & set validation
     const fieldValidation = useCallback(
@@ -77,6 +74,32 @@ const useFormr = <T extends object>({
             fieldValidation(key, value);
         },
         [fieldValidation]
+    );
+
+    // Form reset handler
+    const onResetFormHandler = useCallback<
+        FormrFunctions<T>['onResetFormHandler']
+    >(
+        (resetValues) => {
+            const values = { ...formFields, ...(resetValues ?? {}) };
+            setValues(values);
+            setTouched(fieldBools(values));
+            valid.current = fieldBools(
+                validation ?? {}
+            ) as DerivedBoolObject<T>;
+        },
+        [valid.current, setValues, setTouched]
+    );
+
+    const onResetFieldHandler = useCallback<
+        FormrFunctions<T>['onResetFieldHandler']
+    >(
+        (key) => {
+            onChangeHandler(key, formFields[key]);
+            setTouched((prev) => ({ ...prev, [key]: false }));
+            setValid(key, false);
+        },
+        [onChangeHandler, setTouched, setValid]
     );
 
     // Input Blur listner
@@ -200,6 +223,7 @@ const useFormr = <T extends object>({
             onSubmitEditingHandler
         ]
     );
+
     const outputRefs: any = { ...formFields };
     Object.keys(formFields).map((val, key) => {
         outputRefs[val] = refs.current[key];
@@ -210,6 +234,8 @@ const useFormr = <T extends object>({
         onBlurHandler,
         onSubmitEditingHandler,
         onSubmitHandler,
+        onResetFieldHandler,
+        onResetFormHandler,
         inputBinder,
         refsHandler,
         refs: outputRefs,

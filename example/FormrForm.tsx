@@ -7,7 +7,8 @@ import {
     TextInput,
     Button,
     KeyboardAvoidingView,
-    ScrollView
+    ScrollView,
+    TouchableHighlight
 } from 'react-native';
 import { useFormr } from './../src';
 
@@ -16,7 +17,14 @@ export default function App(props: any) {
     const [submited, setSubmitted] = useState(false);
     const [onChangeValue, setOnChangeValue] = useState({});
 
-    const { values, touched, valid, onSubmitHandler, inputBinder } = useFormr({
+    const {
+        values,
+        touched,
+        valid,
+        onSubmitHandler,
+        inputBinder,
+        onResetFormHandler
+    } = useFormr({
         formFields: {
             name: '',
             email: '',
@@ -25,15 +33,42 @@ export default function App(props: any) {
         validation: props.validations,
         onChange: setOnChangeValue
     });
-    // console.log({ values, touched, valid });
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             enabled={true}
             behavior="padding">
+            <TouchableHighlight
+                testID="resetButton"
+                onPress={() => {
+                    onResetFormHandler();
+                }}>
+                <Text>Reset</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+                testID="resetButton2"
+                onPress={() => {
+                    onResetFormHandler({
+                        name: 'name',
+                        email: 'email',
+                        password: 'password'
+                    });
+                }}>
+                <Text>Reset With Value</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+                testID="resetButton3"
+                onPress={() => {
+                    onResetFormHandler({
+                        name: 'name',
+                        email: 'email'
+                    });
+                }}>
+                <Text>Reset With Value</Text>
+            </TouchableHighlight>
             <ScrollView style={styles.container}>
                 <Text>Former</Text>
-
                 <View
                     style={{
                         flex: 1,

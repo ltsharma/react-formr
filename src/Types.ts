@@ -36,7 +36,7 @@ export interface FormrProps<T> {
     formFields: T;
 
     /** Object of validation with respect to formFields */
-    validation?: FormrValidation<T>;
+    validation?: Partial<FormrValidation<T>>;
 
     /** Control to disable autofocuse on return of input */
     disbaleAutoFocus?: boolean;

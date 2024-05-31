@@ -1,13 +1,14 @@
 {
     "name": "react-formr",
-    "version": "1.4.0",
+    "version": "1.4.2",
     "description": "Form managing component for React & React Native",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "scripts": {
         "test": "jest",
         "testu": "jest --updateSnapshot",
-        "tsc": "tsc -p tsconfig.json"
+        "tsc": "tsc -p tsconfig.json",
+        "publish": "tsc -p tsconfig.json && npm publish "
     },
     "repository": {
         "type": "git",

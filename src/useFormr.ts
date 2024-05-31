@@ -38,7 +38,9 @@ const useFormr = <T extends object>({
     const fieldValidation = useCallback(
         (key: keyof T, value: string | any) => {
             if (validation && validation[key]) {
-                const validationObj: FormValidation = validation[key];
+                const validationObj: FormValidation = validation[
+                    key
+                ] as FormValidation;
                 // if validation type is set
                 if (validationObj.type) {
                     const interValidation = validator(
@@ -123,10 +125,8 @@ const useFormr = <T extends object>({
             ).some((key: keyof T) => {
                 // reurn true if any nonvalid formfields
                 if (
-                    validation &&
-                    validation[key] &&
-                    validation[key].hasOwnProperty('required') &&
-                    validation[key].required
+                    validation?.[key]?.hasOwnProperty('required') &&
+                    validation?.[key]?.required
                 ) {
                     return valid.current[key] === false;
                 } else {
@@ -135,7 +135,7 @@ const useFormr = <T extends object>({
                 }
             });
             if (submissionAllowed) {
-                callback(values);
+                callback(values as T);
                 return true;
             } else {
                 // blurr all fields to show error if any

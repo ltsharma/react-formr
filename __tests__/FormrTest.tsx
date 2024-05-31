@@ -2,7 +2,9 @@ import React from 'react';
 import { render, fireEvent } from 'react-native-testing-library';
 import FormrForm from '../example/FormrForm';
 import renderer from 'react-test-renderer';
-
+Object.defineProperty(global, 'performance', {
+    writable: true
+});
 const validations = {
     allRequired: {
         email: { required: true, type: 'email' },
@@ -341,5 +343,93 @@ describe('Submit with value test', () => {
         expect(passwordInput.props.touched).toBe(true);
         // Submit
         expect(submit.props.submited).toBe(true);
+    });
+});
+
+describe('Form Reset Test', () => {
+    test('reset button with default form values', () => {
+        const testComponent = (
+            <FormrForm validations={validations.allRequired} />
+        );
+        const { getByTestId } = render(testComponent);
+
+        const resetButton = getByTestId('resetButton');
+        // Input
+        const nameInput = getByTestId('nameInput');
+        const emailInput = getByTestId('emailInput');
+        const passwordInput = getByTestId('passwordInput');
+
+        // Test
+        expect(resetButton).not.toBeNull();
+        expect(nameInput).not.toBeNull();
+        expect(emailInput).not.toBeNull();
+        expect(passwordInput).not.toBeNull();
+
+        fireEvent(nameInput, 'onChangeText', values.emailInvalid.name);
+        fireEvent(nameInput, 'onBlur');
+        fireEvent(emailInput, 'onChangeText', values.emailInvalid.email);
+        fireEvent(emailInput, 'onBlur');
+        fireEvent(passwordInput, 'onChangeText', values.emailInvalid.password);
+        fireEvent(passwordInput, 'onBlur');
+
+        fireEvent.press(resetButton);
+
+        // Values
+        expect(nameInput.props.value).toBe('');
+        expect(emailInput.props.value).toBe('');
+        expect(passwordInput.props.value).toBe('');
+        // Valid
+        expect(nameInput.props.valid).toBe(false);
+        expect(emailInput.props.valid).toBe(false);
+        expect(passwordInput.props.valid).toBe(false);
+        // Touched
+        expect(nameInput.props.touched).toBe(false);
+        expect(emailInput.props.touched).toBe(false);
+        expect(passwordInput.props.touched).toBe(false);
+        //  // Submit
+        //  expect(submit.props.submited).toBe(true);
+    });
+
+    test('reset button with new values', () => {
+        const testComponent = (
+            <FormrForm validations={validations.allRequired} />
+        );
+        const { getByTestId } = render(testComponent);
+
+        const resetButton = getByTestId('resetButton2');
+        // Input
+        const nameInput = getByTestId('nameInput');
+        const emailInput = getByTestId('emailInput');
+        const passwordInput = getByTestId('passwordInput');
+
+        // Test
+        expect(resetButton).not.toBeNull();
+        expect(nameInput).not.toBeNull();
+        expect(emailInput).not.toBeNull();
+        expect(passwordInput).not.toBeNull();
+
+        fireEvent(nameInput, 'onChangeText', values.emailInvalid.name);
+        fireEvent(nameInput, 'onBlur');
+        fireEvent(emailInput, 'onChangeText', values.emailInvalid.email);
+        fireEvent(emailInput, 'onBlur');
+        fireEvent(passwordInput, 'onChangeText', values.emailInvalid.password);
+        fireEvent(passwordInput, 'onBlur');
+
+        fireEvent.press(resetButton);
+
+        // Values
+        expect(nameInput.props.value).toBe('name');
+        expect(emailInput.props.value).toBe('email');
+        expect(passwordInput.props.value).toBe('password');
+        // Valid
+        expect(nameInput.props.valid).toBe(false);
+        expect(emailInput.props.valid).toBe(false);
+        expect(passwordInput.props.valid).toBe(false);
+        // Touched
+        expect(nameInput.props.touched).toBe(false);
+        expect(emailInput.props.touched).toBe(false);
+        expect(passwordInput.props.touched).toBe(false);
+        //  // Submit
+        //  expect(submit.props.submited).toBe(true);
     });
 });

@@ -30,18 +30,17 @@ const useFormr = <T extends object>({
     }, [values, onChange]);
 
     // Setting valid helper
-    const setValid = useCallback(
-        (key: keyof T, validated: boolean) => {
-            valid.current = { ...valid.current, [key]: validated };
-        },
-        [valid]
-    );
+    const setValid = useCallback((key: keyof T, validated: boolean) => {
+        valid.current = { ...valid.current, [key]: validated };
+    }, []);
 
     // run validation & set validation
     const fieldValidation = useCallback(
         (key: keyof T, value: string | any) => {
             if (validation && validation[key]) {
-                const validationObj: FormValidation = validation[key];
+                const validationObj: FormValidation = validation[
+                    key
+                ] as FormValidation;
                 // if validation type is set
                 if (validationObj.type) {
                     const interValidation = validator(
@@ -79,6 +78,32 @@ const useFormr = <T extends object>({
         [fieldValidation]
     );
 
+    // Form reset handler
+    const onResetFormHandler = useCallback<
+        FormrFunctions<T>['onResetFormHandler']
+    >(
+        (resetValues) => {
+            const values = { ...formFields, ...(resetValues ?? {}) };
+            setValues(values);
+            setTouched(fieldBools(values));
+            valid.current = fieldBools(
+                validation ?? {}
+            ) as DerivedBoolObject<T>;
+        },
+        [valid.current, setValues, setTouched]
+    );
+
+    const onResetFieldHandler = useCallback<
+        FormrFunctions<T>['onResetFieldHandler']
+    >(
+        (key) => {
+            onChangeHandler(key, formFields[key]);
+            setTouched((prev) => ({ ...prev, [key]: false }));
+            setValid(key, false);
+        },
+        [onChangeHandler, setTouched, setValid]
+    );
+
     // Input Blur listner
     const onBlurHandler = useCallback<FormrFunctions<T>['onBlurHandler']>(
         (key: keyof T) => {
@@ -100,10 +125,8 @@ const useFormr = <T extends object>({
             ).some((key: keyof T) => {
                 // reurn true if any nonvalid formfields
                 if (
-                    validation &&
-                    validation[key] &&
-                    validation[key].hasOwnProperty('required') &&
-                    validation[key].required
+                    validation?.[key]?.hasOwnProperty('required') &&
+                    validation?.[key]?.required
                 ) {
                     return valid.current[key] === false;
                 } else {
@@ -112,7 +135,7 @@ const useFormr = <T extends object>({
                 }
             });
             if (submissionAllowed) {
-                callback(values);
+                callback(values as T);
                 return true;
             } else {
                 // blurr all fields to show error if any
@@ -200,6 +223,7 @@ const useFormr = <T extends object>({
             onSubmitEditingHandler
         ]
     );
+
     const outputRefs: any = { ...formFields };
     Object.keys(formFields).map((val, key) => {
         outputRefs[val] = refs.current[key];
@@ -210,6 +234,8 @@ const useFormr = <T extends object>({
         onBlurHandler,
         onSubmitEditingHandler,
         onSubmitHandler,
+        onResetFieldHandler,
+        onResetFormHandler,
         inputBinder,
         refsHandler,
         refs: outputRefs,
